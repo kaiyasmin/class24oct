@@ -49,7 +49,7 @@ all <- left_join(indiv_clean, cm_clean, by = "cmte_id")
 
 ```{r}
 all %>%
-  filter(str_detect(employer, "HARVARD")) %>%
+  filter(str_detect(employer, "HARVARD"))
   
   
 ```
