@@ -9,22 +9,48 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(stringr)
+library(fs)
+
+
 ```
 
-```{r download_indiv, message=FALSE}
+```{r download_indiv, message=FALSE, cache = TRUE}
 download.file(url = "https://www.fec.gov/files/bulk-downloads/1990/indiv90.zip", 
               destfile = "indiv90.zip") 
 unzip("indiv90.zip") 
 
-indiv <- read_delim("itcont.txt", delim = "|", col_names = FALSE, escape_double = FALSE)
+indiv <- read_delim("itcont.txt", delim = "|", col_names = FALSE, escape_double = FALSE) 
 
-
-  
-x %>% 
-  transmute(name = X8, employer = X12, state = X10, amount = X15) %>% 
-  filter(str_detect(employer, "HARVARD")) %>% 
-  count(employer)  
+file_delete(c("indiv90.zip", "itcont.txt"))
 
 ```
+* The number of observations is `r nrow(indiv)` 
+
+```{r}
+download.file(url = "https://www.fec.gov/files/bulk-downloads/1990/cm90.zip", 
+              destfile = "cm90.zip") 
+unzip("cm90.zip") 
+
+cm <- read_delim("cm.txt", delim = "|", col_names = FALSE, escape_double = FALSE) 
+
+file_delete(c("cm90.zip", "cm.txt"))
+```
+
+```{r}
+indiv_clean <- indiv %>%
+  transmute(cmte_id = X1, name = X8, employer = X12, occupation = X13, amount = X15)
+
+cm_clean <- cm %>%
+  transmute (cmte_id = X1, cmte_name = X2, cmte_party = X11)
+
+all <- left_join(indiv_clean, cm_clean, by = "cmte_id")  
+
+```
+
+```{r}
+all %>%
+  filter(str_detect(employer, "HARVARD")) %>%
+  
+  
 ```
 
