@@ -1,0 +1,30 @@
+---
+title: "class24oct"
+author: "Kai Potter"
+date: "10/24/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stringr)
+```
+
+```{r download_indiv, message=FALSE}
+download.file(url = "https://www.fec.gov/files/bulk-downloads/1990/indiv90.zip", 
+              destfile = "indiv90.zip") 
+unzip("indiv90.zip") 
+
+indiv <- read_delim("itcont.txt", delim = "|", col_names = FALSE, escape_double = FALSE)
+
+
+  
+x %>% 
+  transmute(name = X8, employer = X12, state = X10, amount = X15) %>% 
+  filter(str_detect(employer, "HARVARD")) %>% 
+  count(employer)  
+
+```
+```
+
